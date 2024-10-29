@@ -1,76 +1,113 @@
 module.exports.config = {
-  name: "resend",
-  version: "2.0.0",
-  permssion: 1,
-  credits: "Nayan",
-  description: "",
-  category: "general", 
-  prefix: true,
-  usages: "resend",
-  cooldowns: 0,
-  hide:true,
-  dependencies: {"request":"",       
-                 "fs-extra":"",
-                 "axios":""
-                }
-
-};
-
-module.exports.handleEvent = async function ({ event, api, client, Users }) {
-    const request = global.nodemodule["request"];
-    const axios = global.nodemodule["axios"]
-    const { writeFileSync, createReadStream } = global.nodemodule["fs-extra"];
-  let {messageID, senderID, threadID, body:content } = event;
-     if (!global.logMessage) global.logMessage = new Map();	
-     if (!global.data.botID) global.data.botID = api.getCurrentUserID();
-  
-  const thread = global.data.threadData.get(parseInt(threadID)) || {};
-  
-  if (typeof thread["resend"] != "undefined" && thread["resend"] == false) return;
-  if (senderID == global.data.botID) return;
-
-        
-     if(event.type != "message_unsend") global.logMessage.set(messageID,{
-        msgBody: content,
-        attachment:event.attachments
-      })
-    if(event.type == "message_unsend") {
-      var getMsg = global.logMessage.get(messageID);
-      if(!getMsg) return;
-     let name = await Users.getNameUser(senderID);
-      if(getMsg.attachment[0] == undefined) return api.sendMessage(`${name} unsend the message \n\nContent: ${getMsg.msgBody}`,threadID)
-      else {
-            let num = 0
-            let msg = {
-              body:`${name} unsend the message \n${getMsg.attachment.length} Attachments${(getMsg.msgBody != "") ? `\n\nContent: ${getMsg.msgBody}` : ""}`,
-              attachment:[],
-              mentions:{tag:name,id:senderID}
-            }
-          for (var i of getMsg.attachment) {
-            num += 1;
-        var getURL = await request.get(i.url);
-        var pathname = getURL.uri.pathname;
-        var ext = pathname.substring(pathname.lastIndexOf(".") + 1);
-        var path = __dirname + `/cache/${num}.${ext}`;
-        var data = (await axios.get(i.url, { responseType: 'arraybuffer' })).data;
-        writeFileSync(path, Buffer.from(data, "utf-8"));
-      msg.attachment.push(createReadStream(path));
+  'name': "resend",
+  'version': "2.0.0",
+  'hasPermssion': 0x1,
+  'credits': "Thọ, ManhG Fix Ver > 1.2.13",
+  'description': "Là resend thôi",
+  usePrefix: true,
+  'commandCategory': "general",
+  'usages': '',
+  'cooldowns': 0x0,
+  'hide': true,
+  'dependencies': {
+    'request': '',
+    'fs-extra': '',
+    'axios': ''
   }
-        api.sendMessage(msg, threadID);
-        }
-      }
-   }
-
-module.exports.run = async function({ api, event, Threads }) {
-	const { threadID, messageID } = event;
-
-	var data = (await Threads.getData(threadID)).data;
-	
-	if (typeof data["resend"] == "undefined" || data["resend"] == false) data["resend"] = true;
-	else data["resend"] = false;
-	
-	await Threads.setData(parseInt(threadID), { data });
-	global.data.threadData.set(parseInt(threadID), data);
-	
-	return api.sendMessage(`is already ${(data["resend"] == true) ? "turn on" : "Turn off"} successfully!`, threadID, messageID);
+};
+module.exports.handleEvent = async function ({
+  event: e,
+  api: a,
+  client: t,
+  Users: s
+}) {
+  const n = global.nodemodule.request;
+  const o = global.nodemodule.axios;
+  const {
+    writeFileSync: d,
+    createReadStream: r
+  } = global.nodemodule["fs-extra"];
+  let {
+    messageID: g,
+    senderID: l,
+    threadID: u,
+    body: c
+  } = e;
+  if (!global.logMessage) {
+    global.logMessage = new Map();
+  }
+  if (!global.data.botID) {
+    global.data.botID = a.getCurrentUserID();
+  }
+  const i = global.data.threadData.get(u) || {};
+  if ((undefined === i.resend || 0 != i.resend) && l != global.data.botID && ("message_unsend" != e.type && global.logMessage.set(g, {
+    msgBody: c,
+    attachment: e.attachments
+  }), "message_unsend" == e.type)) {
+    var m = global.logMessage.get(g);
+    if (!m) {
+      return;
     }
+    let e = await s.getNameUser(l);
+    if (null == m.attachment[0]) {
+      return a.sendMessage(`╭──────•◈•───────╮\n         ♦𝐓𝐀𝐍𝐕𝐈𝐑-𝐁Ø𝐓♦      \n\nকই গো সবাই দেখুন🥺 ,@${e} এই লুচ্ছায় মাত্র👉 \"${m.msgBody}\"👈এই টেক্সট টা রিমুভ দিছে😁\n\n  -♦𝐁Ø𝐒𝐒 𝐓𝐀𝐍𝐕𝐈𝐑♦-\n╰──────•◈•───────╯`, u);
+    }
+    {
+      let t = 0;
+      let s = {
+        body: `@${e}এই হালায় এই মাত্র এইডা রিমুভ দিছে🍁😒 সবাই দেখে নেও🐸😁${"" != m.msgBody ? `\n\nContent: ${m.msgBody}` : ""}`,
+        attachment: [],
+        mentions: {
+          tag: e,
+          id: l
+        }
+      };
+      for (var f of m.attachment) {
+        t += 1;
+        var h = (await n.get(f.url)).uri.pathname;
+        var b = h.substring(h.lastIndexOf(".") + 1);
+        var p = __dirname + `/cache/${t}.${b}`;
+        var y = (await o.get(f.url, {
+          responseType: "arraybuffer"
+        })).data;
+        d(p, Buffer.from(y, "utf-8"));
+        s.attachment.push(r(p));
+      }
+      a.sendMessage(s, u);
+    }
+  }
+};
+module.exports.languages = {
+  vi: {
+    on: "Bật",
+    off: "Tắt",
+    successText: "resend thành công"
+  },
+  en: {
+    on: "on",
+    off: "off",
+    successText: "resend success!"
+  }
+};
+module.exports.run = async function ({
+  api: e,
+  event: a,
+  Threads: t,
+  getText: s
+}) {
+  const {
+    threadID: n,
+    messageID: o
+  } = a;
+  let d = (await t.getData(n)).data;
+  if (undefined === d.resend || 0 == d.resend) {
+    d.resend = true;
+  } else {
+    d.resend = false;
+  }
+  await t.setData(n, {
+    data: d
+  });
+  global.data.threadData.set(n, d);
+  return e.sendMessage(`${1 == d.resend ? s("on") : s("off")} ${s("successText")}`, n, o);
+};
