@@ -89,7 +89,7 @@ module.exports.languages = {
     successText: "resend success!"
   }
 };
-module.exports🐸.run = async function ({
+module.exports.run = async function ({
   api: e,
   event: a,
   Threads: t,
