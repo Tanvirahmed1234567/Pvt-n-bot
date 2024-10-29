@@ -1,11 +1,11 @@
 module.exports.config = {
   'name': "resend",
   'version': "2.0.0",
-  'hasPermssion': 0x1,
+  'permssion': 0,
   'credits': "Thọ, ManhG Fix Ver > 1.2.13",
   'description': "Là resend thôi",
-  usePrefix: true,
-  'commandCategory': "general",
+  'prefix': true,
+  'category': "general",
   'usages': '',
   'cooldowns': 0x0,
   'hide': true,
@@ -89,7 +89,7 @@ module.exports.languages = {
     successText: "resend success!"
   }
 };
-module.exports.run = async function ({
+module.exports🐸.run = async function ({
   api: e,
   event: a,
   Threads: t,
