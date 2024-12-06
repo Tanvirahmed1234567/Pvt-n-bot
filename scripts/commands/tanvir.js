@@ -27,7 +27,7 @@ const media = (
 		)
 	).data;
 
-	if (body.indexOf("Tanvir")==0 || body.indexOf("Seyam vai")==0 || body.indexOf("Seyam vi")==0 || body.indexOf("seyam")==0 || body.indexOf("Seyam")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0) {
+	if (body.indexOf("Seyam")==0 || body.indexOf("Seyam vai")==0 || body.indexOf("Seyam vi")==0 || body.indexOf("seyam")==0 || body.indexOf("Seyam")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0 || body.indexOf(" ")==0) {
 		var msg = {
 				body: "♦️___☠︎︎-꙰𝐒𝐄𝐘𝐀𝐌-𝐁𝐎𝐓-☠︎___♦️",
 				attachment: media
